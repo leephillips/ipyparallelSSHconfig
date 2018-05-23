@@ -1,0 +1,917 @@
+<!DOCTYPE HTML><html dir="ltr" lang="en-US"><head><meta content="text/html;charset=utf-8" http-equiv="Content-Type" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><link href="https://fonts.googleapis.com/css?family=Alegreya:normal,italic,bold%7CAlegreya+SC:normal,italic,bold%7Cosis" rel="stylesheet" /><script src="/fn.js"> </script>
+<title>Minimal Configuration for ipyparallel over SSH</title>
+<style>
+.doubletable {
+  border-collapse: collapse;
+  }
+.invisible {
+    display: none;
+}
+.smallcaps {
+  text-transform: lowercase;
+  font-family: serif;
+}
+abbr {
+  cursor: pointer;
+  text-transform: lowercase;
+  font-family: serif;
+}
+.hugepicture .caption{
+   color: #666;
+   margin-left: 5em;
+   font-size: 85%;
+   line-height: 1.2em;
+}
+p { 
+text-indent: 0em; margin-top: 1.0em; margin-bottom: 0;
+}
+p {
+  -moz-hyphens: auto;
+  hyphens: auto;
+}
+div p:first-child{
+   margin-top: 0pt;
+}
+p:first-child {
+   text-indent: 0em;
+}
+h2 + p {
+   text-indent: 0em;
+}
+h1 + p {
+   text-indent: 0em;
+}
+h3 + p {
+   text-indent: 0em;
+}
+.sitelinkitem .headlinetitle {
+   font-weight: normal;
+}
+div.authorlist-article + p {
+   text-indent: 0em;
+}
+div.title-article + p {
+   text-indent: 0em;
+}
+pre {
+   line-height: 1.2em;
+   font-size: 1em;
+}
+code {
+   font-family: FreeMono, monospace;
+   font-size: 1em;
+}
+code  p {
+   margin-left: 3em;
+   margin-right: 3em;
+}
+.codelisting, .numberedcodelisting{
+   font-family: FreeMono, "Courier New", Courier, monospace;
+   font-size: 85%;
+   /* background: #333; */
+   /* color: #eee; */
+   margin-left: 0em;
+   margin-right: 0em;
+   margin-top: 2ex;
+   margin-bottom: 2ex;
+   overflow: auto;
+   line-height: 1.4em;
+}
+.codelisting li{
+   list-style-type: none;
+   white-space: pre;
+   margin-left: -2.4em;
+   margin-right: 2em;
+}
+.numberedcodelisting li{
+   white-space: pre;
+   margin: 0;
+   padding: 0;
+}
+.eqnum {
+    float:right;
+    color: #933;
+    font-weight: bold;
+}
+.letterquot{
+   color: green;
+   margin-left:9%;
+   line-height: 1.3em;
+}
+hr.footnoterule { text-align: left; width: 40%; margin-right: 60%; color: black }
+p.frst { text-indent: 0em; margin-top: 0; margin-bottom: 0; margin-left: 0em;}
+p.error {
+         color: #ff3333;
+         font-weight: bold;
+}
+
+.urldiv {
+   display: none;
+}
+.smalldivider {
+  
+   text-align: center;
+   font-size: 100%;
+   margin-bottom: 1.5em;
+   margin-top: 1.5em;
+}
+
+span.fnclicked{
+   display: inline;
+   position:relative;
+   cursor: pointer;
+   color: #939;
+}
+span.fn{
+   display: inline;
+   position:relative;
+   cursor: pointer;
+   color: #939;
+}
+span.fnclicked span.fntext{
+   display:block;
+   text-indent: 0;
+   padding: 2mm;
+   position:absolute;
+   top:1em; left:0em; width:15em;
+   background-color:#333; color:#ddd;
+   font-size: 90%;
+   line-height: 1.3em;
+   z-index: 50;
+   opacity: 0.9;
+}
+span.fnclicked span.fntext a{
+   color: #7ad;
+}
+span.fn span.fntext{
+   display: none;
+}
+span.fn:hover span.fntext{
+   display:block;
+   text-indent: 0;
+   padding: 2mm;
+   position:absolute;
+   top:1em; left:0em; width:15em;
+   background-color:#333; color:#ddd;
+   font-size: 90%;
+   line-height: 1.3em;
+   z-index: 50;
+   opacity: 0.9;
+}
+span.fn:hover span.fntext a{
+   color: #7ad;
+}
+span.fn:active span.fntext{
+   display: none;
+}
+span.fnclicked:active span.fntext{
+   display: none;
+}
+span.fn:hover span.fntext span.fntext{
+   display: none;
+}
+span.fnclicked:hover span.fntext span.fntext{
+   display: none;
+}
+span.fnclicked span.fntext span.fntext{
+   display: none;
+}
+.fnote
+{
+   position: fixed;
+   display:none;
+   bottom: 0;
+   left: 0;
+   border: solid #99f 0.0mm;
+   width: 100%;
+   height: 0;
+}
+.foot {
+   color: #666;
+   background: #333;
+   font-size: 50%;
+      }
+.mnote
+{
+   float: right;
+   top: 40%;
+   left: 5.3in;
+   border: solid #99f 0.0mm;
+   width: 1.4in;
+   height: 1.8in;
+}
+.mnotetext
+{
+   width: 1.1in;
+   font-size: 65%;
+   padding: .0mm;
+   color: #9ff;
+}
+.releasenotes
+{
+	margin-top: 0.2em; margin-bottom: 0.2em;
+	margin-right: 0in;
+	margin-left: 3mm;
+	width: 1.8in;
+	height: 1.3in;
+	font-size: 70%;
+	border: solid black thin;
+	padding: 0.4em;
+	line-height: 1.5ex;
+	background: #003;
+	color: #9ff;
+	float:right;
+	overflow: auto;
+	z-index: 50;
+	position:relative;
+}
+.releasenotes p
+{
+    text-indent: 0em;
+    margin-top: 1em;
+    margin-bottom: 0em;
+
+}
+.recenton
+{
+   
+   font-size:80%;
+   float:right;
+   width: 33%;
+   padding:2mm;
+   margin:2mm;
+   border: solid 0.5mm;
+   border-color: #ccf;
+}
+.recenton p
+{
+   margin-top: 0.5em;
+}
+
+.diagnote
+{
+	margin-left: 0cm;
+	margin-right: 0cm;
+	margin-top: 0ex;
+	margin-bottom: 0em;
+	padding: 0.6cm  0.6cm 0.6cm 0.6cm;
+/* 	border: solid navy thin; */
+	background: #666;
+            background-image: none;
+
+}
+
+p.formannotation
+{
+    font-size: 60%; text-indent: 0em;
+    color: black;
+    background: white;
+}
+.bigitem
+{
+    clear: both;
+	border-color: #ccf;
+	border-width: .4mm;
+	border-style: dashed;
+	margin-top: 0.5cm;
+	margin-bottom: 0.5cm;
+	padding: 0.7em;
+}
+
+html, body {
+  font-family: sans-serif;
+  font-size: 100%;
+  margin: 0;
+  width: 50rem;
+  height: 100%;
+  border: 0mm;
+}
+.main
+{
+	padding: 0.6cm  1.2cm 0.6cm 0.6cm;
+        color: white;
+/*	width: 5in;  */
+        margin-bottom: 0.6in;
+}
+.document blockquote{
+    color: #666;
+    font-size: 100%;
+    width: 70%;
+    margin-left: 15%;
+}
+.main blockquote{
+    color: #ccc;
+    font-size: 90%;
+}
+
+.dtitle
+{
+    font-size: 200%;
+    padding-right: 3mm;
+}
+.dtitle a:link  {
+    color: #336;
+}
+.dtitle a:visited {
+    color: #336;
+}
+    
+div.fillinks{
+    line-height: 2.0;
+    padding: 0em;
+}
+div.fillinks p{
+    text-indent: 0em; margin-top: 0; margin-bottom: 0; margin-left: 0em;
+    margin-right: 0em;
+    padding-right: 3mm;
+    padding-left: 1.5mm;
+    display: inline;
+    /*border-top: solid #333 0mm;
+    border-bottom: solid #333 0mm;
+    border-left: solid #333 0mm;
+    border-right: solid #9ff 1mm;*/
+    white-space: nowrap;
+}
+.biglinksleft
+{
+    font-size: 120%;
+    width: 100%;    
+}
+.biglinksleft p
+{
+    text-indent: 0em;
+    margin-top: 1em;
+    margin-bottom: 0em;
+}
+.attribution
+{
+    color: #333;
+    font-style: oblique;
+}
+.attribution a:visited {
+    color: #333;}
+.attribution a:link {
+    color: #333;}
+.diagram{
+    cursor: help;
+}
+.snip
+{
+    background: white;
+    color: black;
+    margin-left: 1.0cm;
+	margin-bottom: 0em;
+	padding: 0.6cm;
+	margin-top: 5%;
+	margin-right: 0cm;
+}
+
+.captionright
+{
+    background: #CCC;
+    padding: .1cm;
+    color: black;
+}
+.photoleft {
+    float: left;
+    margin-bottom: 3em;
+}
+.photocaption
+{
+    background: #CCC;
+    margin-top: 2mm;
+    margin-bottom: 12mm;
+    color: black;
+}
+
+.maint {
+	margin-left: 1.7cm;
+	margin-right: 0.5cm;
+}
+#page{
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+  border: 0mm;
+  margin: 0;
+  padding: 0;
+  /* max-width: 10in;*/
+}
+.fat{
+  font-family: Times, serif;
+  line-height: 1.5em;
+  width: 90%;
+  margin-bottom: 1.5ex;
+  background: #ddd;
+  padding: 3%;
+  margin-top: 1.5ex;
+}
+.document
+{
+  font-family: serif;
+  line-height: 1.5em;
+  font-size: 1.0em;
+  margin: 0;
+  padding-left: 5%;
+  padding-bottom: 3em;
+  padding-top: 1em;
+  width: 85%;
+  /* min-height: 89%; */
+}
+.stickleft{
+    margin-left: -9%;
+}
+.bs {
+   color: #666;
+   font-size: 85%; 
+   line-height: 1.1em;
+   font-family: sans-serif;
+   /* padding-top: 3mm; */
+   padding-bottom: 3mm;
+   padding-left: 2%;
+   padding-right: 2%;
+   height: auto;
+   margin: 0;
+}
+.thypen {
+   color: #868692;
+}
+.document.blockquote{  
+    color: #333;
+    font-size: 90%;
+}
+.authorblock{
+   position: relative;
+   margin-bottom: 1em;
+   color: #746;
+}
+.pubnote{
+   position: relative;
+   margin-bottom: 1em;
+   font-style: oblique;
+   font-size: 90%;
+   line-height: 1.1em;
+   text-indent: 0pt;
+   margin-left: 1em;
+   margin-right: 1em;
+}
+.authorlist-article {
+   display: inline-block;
+   font-style: oblique;
+   margin-bottom: 2em;
+}
+.date-article { 
+   display: inline-block;
+   font-size:90%;
+}
+.date-article:before { 
+   content: " — "
+}
+.epigraph{
+  font-size: 90%; 
+  text-align: right;
+  position: relative;
+  top: -3ex;
+  left: 50%;
+  line-height: 1.1em;
+  width: 40%;
+  margin-bottom: 1em;
+}
+.epigraph .who, .epigraph .who:link, .epigraph .who:visited{
+  color: #666;
+}
+.epigraph .who:before{
+   content: " — "
+   }
+.title-article {
+	text-align: center;
+	color: #369;
+    font-size: 150%;
+	margin-top: 0ex;
+	margin-bottom: 1.5em;
+        clear: both;
+    text-shadow: 0px 1px 0px #fff;
+    line-height: 1.1em;
+}
+.subtitle {
+  text-align: center;
+  color: #369;
+  font-size: 115%;
+  margin-top: 0ex;
+  margin-bottom: 1.5em;
+  line-height: 1.1em;
+  }
+h1.t, h2.t, h3.t, h4.t, h5.t, h6.t {
+    display: none;
+}
+h1
+{
+   color: #746;
+    text-shadow: 0px 1px 0px #fff;
+    line-height: 1.1em;
+	text-align: left;
+	font-weight: normal;
+    font-size: 130%;
+        margin-right: 40%;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	margin-left: 0cm;
+	border-width: 0.5mm;
+	border-style: none none solid none;
+}
+h2{
+    text-shadow: 0px 1px 0px #fff;
+    margin-top: 1.8em;
+    line-height: 1.1em;
+    color: #746; font-size: 120%; font-weight: normal; text-align: center;}
+
+.front h2 { margin-right: 50%; }
+    
+h3 {
+    color: #746;
+    text-align: center;
+    text-shadow: 0px 1px 0px #fff;
+    line-height: 1.1em;
+    font-weight: normal;
+    margin-left: 1.0cm;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 100%;
+    font-style: oblique;
+    }
+    
+h4 {
+    text-align: left;
+    color: navy;
+    padding: 1mm;
+    margin-right: 30%;
+    margin-left: 0pt;
+    font-size: 100%;
+    font-weight: bold;
+    font-family: sans-serif;
+    }
+
+p.warn {
+    border: solid #f3f 0.6mm;
+    padding: 2mm;
+    text-indent: 0em;
+    margin: 1.5ex 0em 1.5ex 2em;
+}
+
+p.intro{
+    text-indent: 0em;
+    font-size: 125%;
+    margin-right: 5em;
+    margin-bottom: 4ex;
+    padding: 2mm;
+    border:solid black 0.5mm;
+}
+
+.arch
+{
+ 	background-color: navy;
+	font-size: 75%;
+}
+
+.gone
+{
+	/*background-color: #999;*/
+        text-decoration: line-through;
+	
+}
+
+.document.pull
+{
+	color: #333;
+	font-size: 90%; 
+	font-style: oblique;
+}
+.pull
+{
+	color: #ccc;
+	font-size: 90%; 
+	font-style: oblique;
+}
+
+
+.noi p {
+	text-indent: 0em;
+	margin-top: 0.4em;
+}
+
+
+.list p {
+    text-indent: 0em;
+    margin-top: 1em;
+    margin-bottom: 0em;
+    margin-left: 0em;
+    margin-right: 0em;
+}
+
+p.list {
+    text-indent: 0em;
+    margin-top: 1em;
+    margin-bottom: 0em;
+}
+
+.openlist p {
+
+    text-indent: 0em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+}
+
+.linknote {
+     font-size: 75%;
+     background: #339;
+}
+
+
+
+a:link {
+    color: #9cf;
+    border-color: transparent;
+    border-style: none none dotted none;
+    border-width: 0.1em;
+    text-decoration: none;
+}
+
+a:active
+{
+    background: black;
+
+}
+
+.document a:link {
+      color:black;
+      text-decoration: none;
+      border-style: none none solid none;
+      border-width: 1mm;
+      border-color: #9999aa;
+}
+
+.document a:visited {
+      color:black;
+      text-decoration: none;
+      text-decoration: none;
+      border-style: none none solid none;
+      border-width: 1mm;
+      border-color: #cc99aa;
+}
+
+.caption, figcaption{
+   color: #666;
+   /* margin-left: 3em; */
+   font-size: 85%;
+   line-height: 1.2em;
+}
+figcaption .credit, figcaption .credit a:link, figcaption .credit a:visited {
+    font-style: oblique;
+    color: #696;
+}
+
+.document a:active
+{
+    background: black;
+
+}
+a:link img{
+border-style: none none none none;
+}
+a:hover img{
+border-style: none none none none;
+}
+a:visited img{
+border-style: none none none none;
+}
+a.gone
+{
+        text-decoration: line-through;	
+}
+a:hover.gone
+{
+        text-decoration: line-through;
+        color: #99f;
+}
+
+
+a.bigurl:link {
+       border-color: #99f;
+    border-style: none none dotted none;
+    border-width: 0.1em;
+    text-decoration: none;
+}
+a.bigurl:visited {
+   
+    border-color: #f99;
+    border-style: none none dotted none;
+    border-width: 0.1em;
+    text-decoration: none;
+}
+
+a.bigurl:active
+{
+    background: black;
+}
+.document sup{
+   font-size: 75%;
+}
+.decoration {
+   width: 14%;
+   margin: 3mm;
+}
+.bpicture {
+   width: 45%;
+   margin: 4mm;
+}
+.picture, .pic {
+   width: 43%;
+   margin-right: -20rem;
+   float: right !important;
+}
+.hugepicture {
+   width: 96%;
+   margin-top: 1em;
+   margin-bottom: 1em;
+   margin-left: 1em;
+   <!--margin-right: -20rem;-->
+   <!--float: right !important;-->
+}
+.bigpicture, .bigpic {
+   width: 76%;
+   margin-top: 1em;
+   margin-bottom: 1em;
+   margin-right: -20rem;
+   margin-left: 1em;
+   float: right !important;
+}
+.bigpicture img, .bigpic img, .hugepicture img, .pic img, .picture img, .bpicture img {
+    width: 100%;
+}
+.biburlinline {
+   display: none;
+}
+#plaintext{
+display:none;
+}
+.fnotes, .bib{
+   font-size: 85%;
+   line-height: 1.1em;
+   word-wrap: break-word; /* This is valid, but the W3C validator complains! */
+}
+.fnotes p, .bib p{
+   text-indent: 0em;
+   margin-top: 1em;
+}
+label{
+   cursor: pointer;
+}
+
+    
+@media screen and (max-width: 700px){
+html, body{
+  background-image: none;
+  }
+.bs{
+    width: 99%;
+}
+.date-article{
+   margin-bottom: 1em;
+}
+.epigraph{
+  text-align: center;
+  position: relative;
+  top: auto;
+  left: 20%;
+  width: 60%;
+  color: #a9a;
+  }
+.frontindex ul
+{
+   margin: 0em;
+   padding: 0em;
+   text-indent: 0.2em;
+}
+.frontindex li
+{
+   margin-right: 1.0em;
+   padding: 0em;
+}
+#page{
+ width:100%;
+}
+
+
+.document{
+   background: #ddd;
+  line-height: 1.5em;
+   width: 96%;
+   height: auto;
+   padding: 2%;
+   padding-bottom: 2%;
+   margin: 0em;
+  border: none;
+}
+.bigpicture {
+   width: 95%;
+   margin: 4mm;
+   display: block;
+}
+span.fnclicked{
+   display: inline;
+   position:relative;
+   cursor: pointer;
+   color: #939;
+}
+span.fn{
+   display: inline;
+   position:relative;
+   cursor: pointer;
+   color: #939;
+}
+span.fnclicked span.fntext{
+   display:block;
+   text-indent: 0;
+   padding: 2mm;
+   position:fixed;
+   top:20%; left:10%; width:75%;
+   background-color:#333; color:#ddd;
+   font-size: 90%;
+   line-height: 1.3em;
+   z-index: 50;
+   opacity: 0.9;
+}
+span.fn span.fntext{
+   display: none;
+}
+span.fn:hover span.fntext{
+   display: none;
+}
+span.fn:active span.fntext{
+   display: none;
+}
+span.fnclicked:active span.fntext{
+   display: none;
+}
+span.fn:hover span.fntext span.fntext{
+   display: none;
+}
+span.fnclicked:hover span.fntext span.fntext{
+   display: none;
+}
+span.fnclicked span.fntext span.fntext{
+   display: none;
+}
+}
+
+@media print{
+.document {
+   background: white;
+   width: 90%;
+}
+.biburlinline {
+   display: inline;
+}
+
+.urldiv{
+   font-size: 75%;
+   /* color: #666; */
+   width: auto;
+   text-align: center;
+   margin-top: 1.6em;
+   line-height: 1.1em;
+   clear:both;
+   display: block;
+   font-family: sans-serif;
+   }
+
+#commenttab{
+    display:none;
+}
+
+}
+</style>    
+</head>
+<body><div id="page"><div class="document"><div class="title-article">Minimal Configuration for ipyparallel over SSH</div>
+<div class="subtitle"></div>
+<div class="authorlist-article">Lee Phillips</div>
+<p>The simplest case for using <a href="https://media.readthedocs.org/pdf/ipyparallel/latest/ipyparallel.pdf">ipyparallel</a> is when you want to create a compute cluster consisting of machines that you can reach through SSH. This note assumes that you have distributed public and private keys to the remote machines so that you can connect to them from your local machine, and they can connect to you, without being prompted for a password. The other requirement is that you adjust any firewalls or routers to allow connections into your local machine. IPython seems to connect on various ports from about 30000 to about 60000.</p>
+<p>After your SSH networking is sorted out, you need to create a new “profile”, with the command <code>ipython profile create --parallel --profile=snet</code>, using any name of your choice in place of “snet”. Now you will have a new directory in your <code>.ipython</code> directory called <code>profile_snet</code>, within which you will find four configuration files. You will need to make some edits to these files to spell out the details of your networked computing cluster. Everything in these files is initially commented out, so you can either add the following edits to the end or find the appropriate lines and edit them.</p>
+<p>In <code>ipcluster_config.py</code>, you will need the lines</p>
+<pre><code>c.IPClusterEngines.engine_launcher_class = &#39;SSH&#39;
+c.IPClusterStart.controller_launcher_class = &#39;Local&#39;
+c.LocalControllerLauncher.controller_args = [&quot;--ip=*&quot;]
+c.IPClusterStart.controller_location = &#39;IP&#39;
+c.SSHLauncher.hostname = &#39;LOCALHOSTNAME&#39;
+c.SSHEngineSetLauncher.engines = {&#39;host1.example.com&#39; : 2, &#39;LOCALHOSTNAME&#39;: 4}</code></pre>
+<p>where you must replace <code>IP</code> by the public-facing IP of your local machine, and <code>LOCALHOSTNAME</code> by a its hostname.</p>
+<p>The list of “engines” in the last line specifies how to assemble the compute cluster. Here we’ve defined two engines on <code>host1</code> and, as before, four engines on our local machine.</p>
+<p>In <code>ipcontroller_config.py</code>, insert the line</p>
+<pre><code>c.HubFactory.client_ip = &#39;IP&#39;</code></pre>
+<p>using the same <code>IP</code> as above.</p>
+<p>With that, the preliminaries are complete. We will again use the <code>ipcluster</code> command, but with an extra argument that refers to our new profile: <code>ipcluster start --profile=&quot;snet&quot;</code></p>
+<p>This command will copy files to the remote hosts with connection and security information. After the command completes, you can interact with your distributed compute cluster from IPython just as you do using a local cluster. The cell magic <code>%%px</code> will now automatically send data and code to the engines defined in your configuration file, and retrieve the results from the network.</p>
+<p>IPython supports many other strategies for distributed computation, including MPI and various batch systems, explained in the voluminous documentation, but SSH is the easiest to explain and the quickest to set up.</p>
+<p>These techniques are not without certain security implications. They increase the attack surface for an adversary with access to any of the networked machines, who may be able to take advantage of exploits to compromise the other machines taking part in the distributed computation. For this reason it is generally regarded as prudent to only use these methods to connect to computers with trusted users.</p>
+</div></body></html>
